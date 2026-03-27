@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="header-tag">AI Powered</div>
+        <h1>Job Tracker</h1>
+        <p class="subtitle">Track your applications and generate AI powered cover letters</p>
+
+        <!-- Add job form -->
+        <div class="form-card">
+            <h2>Add New Application</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" placeholder="e.g. Google">
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" id="role" placeholder="e.g. Software Engineer">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="Applied">Applied</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Final Round">Final Round</option>
+                        <option value="Offer">Offer</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date_applied">Date Applied</label>
+                    <input type="date" id="date_applied">
+                </div>
+                <div class="form-group">
+                    <label for="job_link">Job Link (optional)</label>
+                    <input type="url" id="job_link" placeholder="e.g. https://linkedin.com/jobs/...">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <div class="referral-toggle">
+                        <input type="checkbox" id="referred" onchange="toggleReferral()">
+                        <label for="referred">I was referred for this role</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group full-width" id="referral-name-group">
+                <label for="referral_name">Referral Name</label>
+                <input type="text" id="referral_name" placeholder="e.g. John Smith">
+            </div>
+
+            <button id="add-btn">Add Application</button>
+            <p id="form-status" class="status"></p>
+        </div>
+
+        <!-- Jobs list -->
+        <div class="jobs-section">
+            <h2>Your Applications</h2>
+            <div id="jobs-list">
+                <p class="empty-state">No applications yet. Add one above.</p>
+            </div>
+        </div>
+
+        <!-- Cover letter modal -->
+        <div id="modal-overlay" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>Generate Cover Letter</h3>
+                    <button id="close-modal" class="close-btn">✕</button>
+                </div>
+
+                <div class="jd-section">
+                    <label for="job-description">Job Description (optional)</label>
+                    <textarea id="job-description" placeholder="Paste the job description here for a more personalised cover letter. Leave blank for a general one."></textarea>
+                    <p>Providing the job description generates a tailored cover letter specific to this role.</p>
+                </div>
+
+                <button id="generate-btn" class="generate-btn">Generate Cover Letter</button>
+
+                <div id="cover-letter-content" class="cover-letter-content"></div>
+                <button id="copy-btn" class="copy-btn">Copy to Clipboard</button>
+            </div>
+        </div>
+
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
