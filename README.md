@@ -19,6 +19,9 @@ A full-stack AI-powered web application that helps you track job applications an
 * **Job Link Storage:** Store the job posting URL directly on each application card for quick access.
 * **Robust Error Handling:** Server-side validation to manage empty inputs, missing fields, and API communication failures.
 * **Security First:** Implementation of `.env` patterns to prevent sensitive credential exposure.
+* **Resume-Powered Cover Letters:** Upload your PDF resume and the AI extracts 
+  your actual experience, skills and education to generate a cover letter that 
+  reflects who you really are — not generic filler.
 
 ## 📂 Architecture & Workflow
 
@@ -60,9 +63,3 @@ A full-stack AI-powered web application that helps you track job applications an
 
 5. **Access the UI:**
    Open your browser and navigate to [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
-## 🔮 Planned Improvements
-
-* User authentication and multi-user support
-* Personalised candidate profiles for tailored cover letter generation
-* Application analytics dashboard
