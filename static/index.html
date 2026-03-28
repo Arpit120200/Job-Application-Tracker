@@ -79,8 +79,14 @@
 
                 <div class="jd-section">
                     <label for="job-description">Job Description (optional)</label>
-                    <textarea id="job-description" placeholder="Paste the job description here for a more personalised cover letter. Leave blank for a general one."></textarea>
+                    <textarea id="job-description" placeholder="Paste the job description here for a more personalised cover letter."></textarea>
                     <p>Providing the job description generates a tailored cover letter specific to this role.</p>
+                </div>
+
+                <div class="jd-section">
+                    <label for="resume-upload">Upload Your Resume (optional, PDF only)</label>
+                    <input type="file" id="resume-upload" accept=".pdf">
+                    <p>Your resume is used to personalise the cover letter with your actual experience and skills.</p>
                 </div>
 
                 <button id="generate-btn" class="generate-btn">Generate Cover Letter</button>
@@ -88,7 +94,7 @@
                 <div id="cover-letter-content" class="cover-letter-content"></div>
                 <button id="copy-btn" class="copy-btn">Copy to Clipboard</button>
             </div>
-        </div>
+</div>
 
     </div>
     <script src="/script.js"></script>

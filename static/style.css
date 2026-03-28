@@ -425,6 +425,35 @@ input[type="date"] {
     color-scheme: dark;
 }
 
+input[type="file"] {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #6b7280;
+    padding: 0.5rem 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    background: #1f2937;
+    color: #e8e6e1;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 0.75rem;
+    transition: background 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #374151;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     body { padding: 1.5rem; }

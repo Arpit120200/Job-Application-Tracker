@@ -118,23 +118,82 @@ def generate_cover_letter(job_id):
     if not job:
         return jsonify({"error": "Job not found"}), 404
 
-    # Get the job description from the request body if provided
-    data = request.get_json()
-    job_description = data.get("job_description", "")
+    # Get the job description text from the form data
+    job_description = request.form.get("job_description", "").strip()
 
-    # Build a tailored prompt if JD is provided,
-    # otherwise fall back to a general one
-    if job_description:
-        user_message = f"""Write a cover letter for a {job['role']} position at {job['company']}.
+    # Extract text from the uploaded resume PDF if provided
+    resume_text = ""
+    if "resume" in request.files:
+        resume_file = request.files["resume"]
 
-Use the following job description to tailor the letter specifically to this role:
+        # Only process if the file is actually a PDF
+        if resume_file.filename.endswith(".pdf"):
+            try:
+                from pypdf import PdfReader
+                import io
 
+                # Read the file into memory — no need to save it to disk
+                pdf_bytes = io.BytesIO(resume_file.read())
+                reader = PdfReader(pdf_bytes)
+
+                # Extract text from every page and join it together
+                for page in reader.pages:
+                    resume_text += page.extract_text() or ""
+
+                resume_text = resume_text.strip()
+
+            except Exception as e:
+                return jsonify({"error": f"Could not read PDF: {str(e)}"}), 400
+
+    # Build the prompt based on what the user provided
+    # Four scenarios: both JD and resume, only JD, only resume, neither
+    if resume_text and job_description:
+        user_message = f"""Write a personalised cover letter for someone applying for a {job['role']} position at {job['company']}.
+
+Here is the candidate's resume:
+{resume_text}
+
+Here is the job description:
 {job_description}
 
-Keep it to 3 short paragraphs. Be specific about how the candidate's skills match the role requirements."""
+Instructions:
+- Write 3 short paragraphs
+- Match the candidate's actual experience from the resume to the specific requirements in the job description
+- Be specific — reference real skills, projects or experience from the resume
+- Sound human and natural, not generic
+- Return only the cover letter text, no subject line or extra commentary"""
+
+    elif resume_text:
+        user_message = f"""Write a professional cover letter for someone applying for a {job['role']} position at {job['company']}.
+
+Here is the candidate's resume:
+{resume_text}
+
+Instructions:
+- Write 3 short paragraphs
+- Draw on the candidate's actual experience and skills from the resume
+- Tailor the letter to the role and company
+- Return only the cover letter text"""
+
+    elif job_description:
+        user_message = f"""Write a cover letter for a {job['role']} position at {job['company']}.
+
+Here is the job description:
+{job_description}
+
+Instructions:
+- Write 3 short paragraphs
+- Address the key requirements in the job description
+- Make it compelling and specific
+- Return only the cover letter text"""
+
     else:
         user_message = f"""Write a professional cover letter for a {job['role']} position at {job['company']}.
-Keep it to 3 short paragraphs. Make it compelling and professional."""
+
+Instructions:
+- Write 3 short paragraphs
+- Make it compelling and professional
+- Return only the cover letter text"""
 
     try:
         response = client.chat.completions.create(
@@ -142,7 +201,7 @@ Keep it to 3 short paragraphs. Make it compelling and professional."""
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a professional cover letter writer. Write concise, compelling cover letters. Return only the cover letter text, no subject lines or extra commentary."
+                    "content": "You are an expert cover letter writer. Write personalised, compelling cover letters that sound human and specific. Never use generic filler phrases like 'I am writing to express my interest'."
                 },
                 {
                     "role": "user",

@@ -173,8 +173,8 @@ async function updateStatus(jobId, newStatus) {
 function openCoverLetterModal(jobId) {
     activeJobId = jobId;
 
-    // Reset the modal state
     jobDescriptionInput.value = "";
+    document.getElementById("resume-upload").value = "";
     coverLetterContent.textContent = "";
     coverLetterContent.classList.remove("visible");
     copyBtn.classList.remove("visible");
@@ -189,17 +189,30 @@ generateBtn.addEventListener("click", async function() {
     if (!activeJobId) return;
 
     const jobDescription = jobDescriptionInput.value.trim();
+    const resumeFile = document.getElementById("resume-upload").files[0];
 
     generateBtn.disabled = true;
     generateBtn.textContent = "Generating...";
     coverLetterContent.classList.remove("visible");
     copyBtn.classList.remove("visible");
 
+    // Use FormData instead of JSON because we are sending a file
+    // FormData can carry both text fields and binary file data
+    // in the same request
+    const formData = new FormData();
+    formData.append("job_description", jobDescription);
+
+    // Only append the file if the user actually selected one
+    if (resumeFile) {
+        formData.append("resume", resumeFile);
+    }
+
     try {
         const response = await fetch(`/jobs/${activeJobId}/cover-letter`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ job_description: jobDescription })
+            // Do NOT set Content-Type header when using FormData
+            // The browser sets it automatically with the correct boundary
+            body: formData
         });
 
         const data = await response.json();
