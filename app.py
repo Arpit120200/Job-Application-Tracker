@@ -7,9 +7,6 @@ import os
 
 load_dotenv()
 
-app = Flask(__name__, static_folder="static", static_url_path="")
-CORS(app)
-
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
@@ -30,6 +27,12 @@ def init_db():
     """)
     conn.commit()
     conn.close()
+
+app = Flask(__name__, static_folder="static", static_url_path="")
+CORS(app)
+
+with app.app_context():
+    init_db()
 
 
 def get_db():
